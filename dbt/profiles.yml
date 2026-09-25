@@ -1,0 +1,7 @@
+mortgage_risk:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DUCKDB_PATH', '../data/mortgage.duckdb') }}"
+      threads: 4

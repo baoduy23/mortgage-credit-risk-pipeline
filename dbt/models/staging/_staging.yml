@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: stg_origination
+    description: One row per mortgage at origination.
+    columns:
+      - name: loan_sequence_number
+        tests: [unique, not_null]
+      - name: orig_upb
+        tests: [not_null]
+
+  - name: stg_performance
+    description: Monthly servicing record per mortgage.
+    columns:
+      - name: loan_sequence_number
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_origination')
+                field: loan_sequence_number
+      - name: reporting_month
+        tests: [not_null]
+      - name: dpd_bucket
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['current', '30dpd', '60dpd', '90plus_dpd', 'reo']
